@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Nanda!</title>
+  <style>
+    /* 1. Reset de base et police */
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: "Courier New", monospace;
+      background: #ffdff0;
+    }
+
+    /* 2. La scène principale */
+    .scene {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 15% 20%, #fff 0 2px, transparent 4px),
+        radial-gradient(circle at 85% 25%, #fff 0 3px, transparent 5px),
+        radial-gradient(circle at 20% 80%, #fff 0 2px, transparent 4px),
+        linear-gradient(#ffdff0, #ffc9e3);
+    }
+
+    /* 3. Titre et sous-titre */
+    h1 {
+      margin: 0;
+      color: #d95b91;
+      font-size: clamp(28px, 6vw, 55px);
+      text-align: center;
+      text-shadow: 3px 3px 0 #fff, 5px 5px 0 #f3a9c9;
+      animation: titleFloat 3s ease-in-out infinite;
+      z-index: 10;
+    }
+
+    .subtitle {
+      margin: 10px 0 20px;
+      color: #9d5275;
+      font-size: 15px;
+      letter-spacing: 1px;
+      z-index: 10;
+    }
+
+    /* 4. Conteneur du gâteau */
+    .cake-container {
+      position: relative;
+      width: min(94vw, 400px);
+      height: 320px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 5. Ton image de gâteau */
+    .cake-image {
+      position: relative;
+      width: 100%;
+      animation: cakeFloat 3s ease-in-out infinite;
+      z-index: 5;
+    }
+
+    .cake-image img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 15px rgba(180,70,120,.22));
+    }
+
+    /* 6. La bougie et la flamme */
+    .candle-glow {
+      position: absolute;
+      left: 50%;
+      top: 15%; /* Ajuste ceci si la lueur n'est pas sur la mèche */
+      width: 85px;
+      height: 85px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: rgba(255,193,60,.30);
+      filter: blur(15px);
+      pointer-events: none;
+      animation: candleLight .8s ease-in-out infinite alternate;
+    }
+
+    .extra-flame {
+      position: absolute;
+      left: 50%;
+      top: 12%; /* Ajuste ceci si la flamme n'est pas sur la mèche */
+      width: 25px;
+      height: 39px;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      border-radius: 50% 50% 50% 0;
+      background: radial-gradient(circle at 65% 65%, #fff9a6 0 20%, #ffd83d 35%, #ff9e20 65%, #ff651f 100%);
+      box-shadow: 0 0 8px #fff5a0, 0 0 18px #ffd447, 0 0 35px #ffae2e, 0 0 60px rgba(255,168,35,.7);
+      animation: flameFlicker .18s infinite alternate;
+      pointer-events: none;
+      z-index: 8;
+    }
+
+    /* 7. Animations de la flamme au clic */
+    .extra-flame.blowing {
+      animation: flameBlow .8s ease-in forwards;
+    }
+
+    .candle-glow.blowing {
+      animation: glowFade .8s ease-out forwards;
+    }
+
+    /* 8. Le bouton de souhait */
+    .message {
+      margin-top: 20px;
+      padding: 11px 20px;
+      color: #c04d82;
+      background: #fff2f8;
+      border: 3px solid #e493b8;
+      border-radius: 10px;
+      box-shadow: 4px 4px 0 #d77fa6;
+      cursor: pointer;
+      user-select: none;
+      z-index: 20;
+      animation: messageFloat 2.5s ease-in-out infinite;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .message:hover {
+      transform: translateY(-6px) scale(1.04);
+      box-shadow: 5px 7px 0 #d77fa6;
+    }
+
+    /* 9. Le message d'anniversaire final */
+    .birthday-message {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      width: 92%;
+      max-width: 700px;
+      text-align: center;
+      color: #d94f8c;
+      font-size: clamp(30px, 7vw, 65px);
+      font-weight: bold;
+      text-shadow: 3px 3px 0 white, 6px 6px 0 #f3a9c9;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 50;
+    }
+
+    .birthday-message.show {
+      animation: birthdayPop 1.2s cubic-bezier(.17,.89,.32,1.3) forwards;
+    }
+
+    /* 10. Les étincelles d'arrière-plan */
+    .sparkles span {
+      position: absolute;
+      color: #fff;
+      font-size: 25px;
+      animation: sparkle 2s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    .sparkles span:nth-child(1) { left: 12%; top: 22%; }
+    .sparkles span:nth-child(2) { left: 82%; top: 18%; animation-delay: .4s; }
+    .sparkles span:nth-child(3) { left: 8%; top: 70%; animation-delay: .8s; }
+    .sparkles span:nth-child(4) { left: 88%; top: 65%; animation-delay: 1.2s; }
+    .sparkles span:nth-child(5) { left: 75%; top: 78%; animation-delay: 1.6s; }
+
+    /* 11. Définitions des animations (Keyframes) */
+    @keyframes titleFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @keyframes cakeFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-9px); }
+    }
+
+    @keyframes flameFlicker {
+      from { transform: translate(-50%,-50%) rotate(-45deg) scale(1); }
+      to { transform: translate(-48%,-52%) rotate(-40deg) scale(1.15); }
+    }
+
+    @keyframes candleLight {
+      from { opacity: .45; transform: translate(-50%,-50%) scale(.8); }
+      to { opacity: 1; transform: translate(-50%,-50%) scale(1.35); }
+    }
+
+    @keyframes flameBlow {
+      0% { opacity: 1; transform: translate(-50%,-50%) rotate(-45deg) scale(1); }
+      100% { opacity: 0; transform: translate(80%,-50%) rotate(-110deg) scale(.15); }
+    }
+
+    @keyframes glowFade {
+      from { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+      to { opacity: 0; transform: translate(-50%,-50%) scale(.2); }
+    }
+
+    @keyframes birthdayPop {
+      0% { opacity: 0; transform: translate(-50%,-50%) scale(.3); }
+      100% { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+    }
+
+    @keyframes messageFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.2; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="scene">
+    <div class="sparkles">
+      <span>✦</span><span>✦</span><span>✦</span><span>✦</span><span>✦</span>
+    </div>
+
+    <h1>Happy Birthday Nanda!</h1>
+    <p class="subtitle">♡ Wishing you the sweetest day ♡</p>
+
+    <div class="cake-container">
+      <div class="candle-glow" id="glow"></div>
+      <div class="extra-flame" id="flame"></div>
+      <div class="cake-image">
+        <!-- ICI : REMPLACE LE TEXTE PAR TON LIEN D'IMAGE -->
+        <img src="REMPLACE_CE_TEXTE_PAR_TON_LIEN_D_IMAGE" alt="Gâteau d'anniversaire">
+      </div>
+    </div>
+
+    <div class="message" id="blowBtn">Make a wish! ✨</div>
+    <div class="birthday-message" id="bdayText">🎉 Happy Birthday Nanda! 🎉</div>
+  </div>
+
+  <script>
+    const blowBtn = document.getElementById('blowBtn');
+    const flame = document.getElementById('flame');
+    const glow = document.getElementById('glow');
+    const bdayText = document.getElementById('bdayText');
+
+    blowBtn.addEventListener('click', () => {
+      flame.classList.add('blowing');
+      glow.classList.add('blowing');
+      setTimeout(() => {
+        bdayText.classList.add('show');
+        blowBtn.style.display = 'none';
+      }, 500); // Déclenche le message après 0.5 secondes
+    });
+  </script>
+</body>
+</html>
