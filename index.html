@@ -5,9 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Happy Birthday Nanda!</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -103,13 +101,8 @@
       z-index: 8;
     }
 
-    .extra-flame.blowing {
-      animation: flameBlow .8s ease-in forwards;
-    }
-
-    .candle-glow.blowing {
-      animation: glowFade .8s ease-out forwards;
-    }
+    .extra-flame.blowing { animation: flameBlow .8s ease-in forwards; }
+    .candle-glow.blowing { animation: glowFade .8s ease-out forwards; }
 
     .message {
       padding: 11px 20px;
@@ -130,26 +123,7 @@
       box-shadow: 5px 7px 0 #d77fa6;
     }
 
-    .birthday-message {
-      position: fixed;
-      left: 50%;
-      top: 50%;
-      width: 92%;
-      max-width: 700px;
-      text-align: center;
-      color: #d94f8c;
-      font-size: clamp(30px, 7vw, 65px);
-      font-weight: bold;
-      text-shadow: 3px 3px 0 white, 6px 6px 0 #f3a9c9;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 50;
-    }
-
-    .birthday-message.show {
-      animation: birthdayPop 1.2s cubic-bezier(.17,.89,.32,1.3) forwards;
-    }
-
+    /* --- Éléments décoratifs (Étoiles & Cœurs) --- */
     .sparkles span {
       position: absolute;
       color: #fff;
@@ -157,14 +131,12 @@
       animation: sparkle 2s ease-in-out infinite;
       z-index: 2;
     }
-
     .sparkles span:nth-child(1) { left: 12%; top: 22%; }
     .sparkles span:nth-child(2) { left: 82%; top: 18%; animation-delay: .4s; }
     .sparkles span:nth-child(3) { left: 8%; top: 70%; animation-delay: .8s; }
     .sparkles span:nth-child(4) { left: 88%; top: 65%; animation-delay: 1.2s; }
     .sparkles span:nth-child(5) { left: 75%; top: 78%; animation-delay: 1.6s; }
 
-    /* Cœurs animés */
     .hearts span {
       position: absolute;
       bottom: -30px;
@@ -173,71 +145,114 @@
       animation: rise 6s linear infinite;
       z-index: 1;
     }
-
     .hearts span:nth-child(1) { left: 15%; }
     .hearts span:nth-child(2) { left: 40%; animation-delay: 2s; }
     .hearts span:nth-child(3) { left: 70%; animation-delay: 3.5s; }
     .hearts span:nth-child(4) { left: 88%; animation-delay: 1s; }
 
-    @keyframes titleFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
+    /* --- Carte ouvrable (3D) --- */
+    .card-modal {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      z-index: 100;
     }
 
-    @keyframes cakeFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-9px); }
+    .card-modal.show {
+      opacity: 1;
+      pointer-events: auto;
     }
 
-    @keyframes flameFlicker {
-      from { transform: translate(-50%,-50%) rotate(-45deg) scale(1); }
-      to { transform: translate(-48%,-52%) rotate(-40deg) scale(1.15); }
+    .card {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      perspective: 1000px;
+      cursor: pointer;
+      transform: scale(0.8);
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.27);
     }
 
-    @keyframes candleLight {
-      from { opacity: .45; transform: translate(-50%,-50%) scale(.8); }
-      to { opacity: 1; transform: translate(-50%,-50%) scale(1.35); }
+    .card-modal.show .card {
+      transform: scale(1);
     }
 
-    @keyframes flameBlow {
-      0% { opacity: 1; transform: translate(-50%,-50%) rotate(-45deg) scale(1); }
-      100% { opacity: 0; transform: translate(80%,-50%) rotate(-110deg) scale(.15); }
+    .card-inside {
+      position: absolute;
+      width: 100%; height: 100%;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: #fff0f6;
+      border-radius: 12px;
+      color: #d94f8c;
+      font-size: 22px;
+      font-weight: bold;
+      line-height: 1.4;
+      border: 2px dashed #f3a9c9;
     }
 
-    @keyframes glowFade {
-      from { opacity: 1; transform: translate(-50%,-50%) scale(1); }
-      to { opacity: 0; transform: translate(-50%,-50%) scale(.2); }
+    .card-cover {
+      position: absolute;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #ff85b3, #d94f8c);
+      border-radius: 12px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: bold;
+      transform-origin: left;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+      z-index: 2;
     }
 
-    @keyframes birthdayPop {
-      0% { opacity: 0; transform: translate(-50%,-50%) scale(.3); }
-      100% { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+    .card.open .card-cover {
+      transform: rotateY(-135deg);
     }
 
-    @keyframes messageFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
+    .card-cover span {
+      font-size: 35px;
+      margin-bottom: 10px;
     }
 
-    @keyframes sparkle {
-      0%, 100% { opacity: 0.2; transform: scale(0.8); }
-      50% { opacity: 1; transform: scale(1.2); }
+    .click-hint {
+      position: absolute;
+      bottom: 12px;
+      font-size: 11px;
+      opacity: 0.8;
+      font-weight: normal;
     }
 
+    /* --- Animations --- */
+    @keyframes titleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes cakeFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+    @keyframes flameFlicker { from { transform: translate(-50%,-50%) rotate(-45deg) scale(1); } to { transform: translate(-48%,-52%) rotate(-40deg) scale(1.15); } }
+    @keyframes candleLight { from { opacity: .45; transform: translate(-50%,-50%) scale(.8); } to { opacity: 1; transform: translate(-50%,-50%) scale(1.35); } }
+    @keyframes flameBlow { 0% { opacity: 1; transform: translate(-50%,-50%) rotate(-45deg) scale(1); } 100% { opacity: 0; transform: translate(80%,-50%) rotate(-110deg) scale(.15); } }
+    @keyframes glowFade { from { opacity: 1; transform: translate(-50%,-50%) scale(1); } to { opacity: 0; transform: translate(-50%,-50%) scale(.2); } }
+    @keyframes messageFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    @keyframes sparkle { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
     @keyframes rise {
-      0% {
-        bottom: -30px;
-        transform: translateX(0) scale(0.8);
-        opacity: 0;
-      }
-      50% {
-        opacity: 0.8;
-      }
-      100% {
-        bottom: 105vh;
-        transform: translateX(30px) scale(1.2);
-        opacity: 0;
-      }
+      0% { bottom: -30px; transform: translateX(0) scale(0.8); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { bottom: 105vh; transform: translateX(30px) scale(1.2); opacity: 0; }
     }
   </style>
 </head>
@@ -264,22 +279,45 @@
     </div>
 
     <div class="message" id="blowBtn">Make a wish! ✨</div>
-    <div class="birthday-message" id="bdayText">🎉 Happy Birthday Nanda! 🎉</div>
+  </div>
+
+  <!-- Modal Carte d'anniversaire -->
+  <div class="card-modal" id="cardModal">
+    <div class="card" id="card">
+      <div class="card-inside">
+        🎉 Happy Birthday Nanda! 🎂<br>
+        <span style="font-size: 14px; font-weight: normal; margin-top: 10px; display: block;">
+          May all your wishes come true! ✨💖
+        </span>
+      </div>
+      <div class="card-cover">
+        <span>✉️</span>
+        Pour toi !
+        <div class="click-hint">(Clique pour ouvrir)</div>
+      </div>
+    </div>
   </div>
 
   <script>
     const blowBtn = document.getElementById('blowBtn');
     const flame = document.getElementById('flame');
     const glow = document.getElementById('glow');
-    const bdayText = document.getElementById('bdayText');
+    const cardModal = document.getElementById('cardModal');
+    const card = document.getElementById('card');
 
+    // Éteindre la bougie et afficher la carte
     blowBtn.addEventListener('click', () => {
       flame.classList.add('blowing');
       glow.classList.add('blowing');
+
       setTimeout(() => {
-        bdayText.classList.add('show');
-        blowBtn.style.display = 'none';
-      }, 500);
+        cardModal.classList.add('show');
+      }, 700);
+    });
+
+    // Ouvrir la carte au clic
+    card.addEventListener('click', () => {
+      card.classList.toggle('open');
     });
   </script>
 </body>
