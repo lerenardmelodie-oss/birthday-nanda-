@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Happy Birthday Nanda!</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     * { box-sizing: border-box; }
 
@@ -303,27 +304,37 @@ Helen
     </div>
   </div>
 
-  <script>
-    const blowBtn = document.getElementById('blowBtn');
-    const flame = document.getElementById('flame');
-    const glow = document.getElementById('glow');
-    const cardModal = document.getElementById('cardModal');
-    const card = document.getElementById('card');
+ <script>
+  const blowBtn = document.getElementById('blowBtn');
+  const flame = document.getElementById('flame');
+  const glow = document.getElementById('glow');
+  const cardModal = document.getElementById('cardModal');
+  const card = document.getElementById('card');
 
-    // Éteindre la bougie et afficher la carte
-    blowBtn.addEventListener('click', () => {
-      flame.classList.add('blowing');
-      glow.classList.add('blowing');
+  // Éteindre la bougie et afficher la carte
+  blowBtn.addEventListener('click', () => {
+    flame.classList.add('blowing');
+    glow.classList.add('blowing');
 
-      setTimeout(() => {
-        cardModal.classList.add('show');
-      }, 700);
-    });
+    setTimeout(() => {
+      cardModal.classList.add('show');
+    }, 700);
+  });
 
-    // Ouvrir la carte au clic
-    card.addEventListener('click', () => {
-      card.classList.toggle('open');
-    });
-  </script>
+  // Ouvrir la carte au clic + Lancer les confettis
+  card.addEventListener('click', () => {
+    const wasOpen = card.classList.contains('open');
+    card.classList.toggle('open');
+
+    // Lance les confettis si la carte vient d'être ouverte
+    if (!wasOpen && typeof confetti === 'function') {
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 }
+      });
+    }
+  });
+</script>
 </body>
 </html>
