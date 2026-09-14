@@ -150,7 +150,7 @@
     .hearts span:nth-child(3) { left: 70%; animation-delay: 3.5s; }
     .hearts span:nth-child(4) { left: 88%; animation-delay: 1s; }
 
-    /* --- Carte ouvrable (3D) --- */
+ /* --- Carte ouvrable (3D) --- */
     .card-modal {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -172,25 +172,22 @@
 
     .card {
       position: relative;
-      width: 320px;
-      height: 220px;
+      width: min(90vw, 550px);
+      max-height: 85vh;
       background: #fff;
       border-radius: 12px;
       box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-      perspective: 1000px;
+      perspective: 1200px;
       cursor: pointer;
       transform: scale(0.8);
       transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.27);
     }
 
-    .card-modal.show .card {
-      transform: scale(1);
-    }
-
     .card-inside {
-      position: absolute;
-      width: 100%; height: 100%;
-      padding: 25px;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 25px 30px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -199,15 +196,19 @@
       background: #fff0f6;
       border-radius: 12px;
       color: #d94f8c;
-      font-size: 22px;
-      font-weight: bold;
+      font-size: clamp(10px, 1.8vw, 13px);
       line-height: 1.4;
       border: 2px dashed #f3a9c9;
+      overflow: hidden;
+      word-break: break-word;
     }
 
     .card-cover {
       position: absolute;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%; 
+      height: 100%;
       background: linear-gradient(135deg, #ff85b3, #d94f8c);
       border-radius: 12px;
       color: white;
@@ -222,7 +223,6 @@
       box-shadow: 5px 0 15px rgba(0,0,0,0.1);
       z-index: 2;
     }
-
     .card.open .card-cover {
       transform: rotateY(-135deg);
     }
